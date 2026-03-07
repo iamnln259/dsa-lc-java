@@ -44,3 +44,34 @@ class Solution {
         return hoursUsed <= h;
     }
 }
+
+//Version 2.0
+
+class Solution{
+    public int minEatingSpeed(int[] piles, int H){
+        int low = 1;
+        int high = piles[0];
+        for(int pile : piles){
+            high = Math.max(high, pile);
+        }
+        while(low < high){
+            int mid = low + (high - low)/2;
+            if(!isPossibleToEatAll(piles, H, mid)){
+                low = mid + 1;
+            }else{
+                high = mid;
+            }
+        }
+        return low;
+    }
+    private boolean isPossibleToEatAll(int[] piles, int hours, int currK){
+        long count = 0;
+        for(long pile : piles){
+            count += pile/currK;
+            if(pile%currK != 0){
+                count ++;
+            }
+        }
+        return (count <= hours);
+    }
+}

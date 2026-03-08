@@ -1,3 +1,17 @@
+Questions
+Approach
+Sorting + Two Pointers (Optimal)
+Concept: Sort the array. Fix the first number (i), fix the second number (j). Now we have a 2Sum problem on the 
+remaining subarray (find left and right such that sum is target - nums[i] - nums[j]).
+Trade-off: Time $O(N^3)$. Space $O(1)$ (ignoring output list). This is the standard acceptable solution.
+Optimization: We can add "pruning" logic. If the smallest possible sum is already $> target$, we break. 
+If the largest possible sum is $< target$, we continue.
+
+Edge Cases
+Integer Overflow: Inputs like [10^9, 10^9, 10^9, 10^9] will fail without long.
+Fewer than 4 elements: Guard clause handles this.
+All Duplicates: [2,2,2,2,2], target 8. Code finds one [2,2,2,2], then skips all other 2s. Correct.
+Code 
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
         // 1. Initialize Result List
@@ -68,3 +82,22 @@ class Solution {
         return result;
     }
 }
+
+Dry Run
+
+Test Case 1: nums = [1, 0, -1, 0, -2, 2], target = 0
+Sort: [-2, -1, 0, 0, 1, 2]
+i = 0 (Val -2):
+j = 1 (Val -1):
+left = 2 (Val 0), right = 5 (Val 2).
+sum = -2 + (-1) + 0 + 2 = -1. Too small (< 0). left++.
+left = 3 (Val 0).
+sum = -2 + (-1) + 0 + 2 = -1. Too small. left++.
+left = 4 (Val 1).
+sum = -2 + (-1) + 1 + 2 = 0. Match! Add [-2, -1, 1, 2].
+i = 1 (Val -1):
+j = 2 (Val 0):
+left = 3 (Val 0), right = 5 (Val 2).
+sum = -1 + 0 + 0 + 2 = 1. Too big (> 0). right--.
+...eventually finds [-1, 0, 0, 1].
+Result: [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]].
